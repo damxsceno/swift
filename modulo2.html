@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="styles.css">
+    <title>Módulo 2: Swift Intermediário</title>
+</head>
+<body>
+    <header>
+        <h1><a href="index.html">SWIFT.GPT</a></h1>
+        <nav>
+            <ul>
+                <li><a href="modulo1.html">MÓDULO I</a></li>
+                <li><a href="modulo2.html">MÓDULO II</a></li>
+                <li><a href="modulo3.html">MÓDULO III</a></li>
+            </ul>
+        </nav>
+    </header>
+    <main class="module-page">
+        <section class="module-content">
+            <h2>MÓDULO II: INTERMEDIÁRIO</h2><br>
+            <p>Ponteiros, Structs e Arquivos</p><br>
+            <h3 style="text-align: justify;">PONTEIROS</h3><br>
+            <p style="text-align: justify;">Na linguagem Swift, como mencionado anteriormente, não há suporte direto para ponteiros como em linguagens de programação tradicionais, como C e C++. Isso faz parte do design da Swift para torná-la mais segura e prevenir erros comuns associados ao uso inadequado de ponteiros.
+                Em Swift, o conceito de referências é usado para tipos de classes (class), enquanto tipos de estrutura (struct) e tipos enumerados (enum) são passados por valor. Isso permite que você lide com dados de maneira mais segura e previsível.
+                Se você realmente precisa interagir com APIs de C ou C++ que usam ponteiros, você pode usar a interoperabilidade com C do Swift. Isso permite que você trabalhe com tipos de ponteiro C usando a biblioteca `import Foundation`, que fornece um nível de abstração para ponteiros e outros tipos C. <br><br>
+                Aqui está um exemplo básico de como usar a interoperabilidade com C para trabalhar com ponteiros em Swift <br><br><br>
+                import Foundation <br><br>
+
+                // Criar um ponteiro C para um inteiro <br>
+                var cPointer = UnsafeMutablePointer-Int-.allocate(capacity: 1) <br>
+                cPointer.pointee = 42 <br><br>
+                
+                // Acessar o valor através do ponteiro<br>
+                let value = cPointer.pointee<br>
+                print("Valor apontado: \(value)")<br><br>
+                
+                // Liberar a memória alocada para o ponteiro<br>
+                cPointer.deallocate()<br><br>
+                
+                // Exemplo de manipulação de strings usando ponteiros<br>
+                let swiftString = "Hello, Swift!"<br>
+                let cString = strdup(swiftString)<br><br>
+                
+                // Converter o ponteiro C para uma String Swift<br>
+                if let cString = cString, let convertedString = String(validatingUTF8: cString) {<br>
+                    print("String convertida: \(convertedString)")<br>
+                    free(cString) // Liberar a memória alocada pelo strdup<br>
+                } <br><br><br>
+                Lembre-se de que, ao lidar com ponteiros usando interoperabilidade C, você precisa ser extremamente cuidadoso para evitar vazamentos de memória e problemas de segurança. O Swift foi projetado para eliminar muitos desses problemas, por isso, sempre que possível, é recomendado seguir as práticas de programação seguras da linguagem.
+                </p><br><hr><br>
+
+            <h3 style="text-align: justify;">STRUCTS</h3><br>
+            <p style="text-align: justify;">Uma struct (ou estrutura) é um tipo de valor que permite agrupar propriedades relacionadas juntas. Elas são usadas para criar tipos de dados personalizados em Swift. Diferentemente das classes, as structs são tipos por valor, o que significa que são copiadas sempre que são passadas como argumentos ou atribuídas a outras variáveis. <br><br>
+                Aqui está um exemplo simples de como definir e usar uma struct em Swift: <br><br><br>
+                struct Point { <br>
+                    var x: Int <br>
+                    var y: Int <br>
+                } <br><br>
+                
+                var myPoint = Point(x: 5, y: 10) <br>
+                print("x: \(myPoint.x), y: \(myPoint.y)") // Saída: x: 5, y: 10 <br><br>
+                
+                var anotherPoint = myPoint<br>
+                anotherPoint.x = 20<br>
+                print("x: \(myPoint.x), y: \(myPoint.y)") // Saída: x: 5, y: 10<br>
+                print("x: \(anotherPoint.x), y: \(anotherPoint.y)") // Saída: x: 20, y: 10<br>
+                
+            </p><br><hr><br>
+
+            <h3 style="text-align: justify;">ARQUIVOS</h3><br>
+            <p style="text-align: justify;">Trabalhar com arquivos em Swift envolve principalmente operações de leitura e gravação. A linguagem oferece classes e estruturas para lidar com operações de arquivo. Uma das classes mais comuns é `FileManager`. <br><br>
+                Aqui estão exemplos básicos de como realizar operações de leitura e gravação de arquivos usando `FileManager`: <br><br><br>
+                let fileManager = FileManager.default <br>
+                let documentDirectory = fileManager.urls(for: .documentDirectory, in: .userDomainMask).first! <br><br>
+                
+                let filePath = documentDirectory.appendingPathComponent("myFile.txt") <br><br>
+                
+                // Gravando em um arquivo <br>
+                let content = "Conteúdo do arquivo." <br>
+                do { <br>
+                    try content.write(to: filePath, atomically: true, encoding: .utf8) <br>
+                } catch { <br>
+                    print("Erro ao gravar no arquivo: \(error)") <br>
+                } <br><br>
+                
+                // Lendo de um arquivo <br><br>
+                do { <br>
+                    let fileContent = try String(contentsOf: filePath, encoding: .utf8) <br>
+                    print("Conteúdo do arquivo: \(fileContent)") <br>
+                } catch { <br>
+                    print("Erro ao ler o arquivo: \(error)") <br>
+                } <br><br>
+                Lembre-se de que, ao trabalhar com arquivos, é importante lidar com erros adequadamente, especialmente quando envolve operações de leitura/gravação. Certifique-se de manipular os erros corretamente usando blocos do tipo `do-catch`.
+                
+            </p><br><hr><br>
+        </section>
+    </main>
+    <footer>
+        <p>&copy; Projeto de LP - Miguel, Theo e Aquino</p>
+    </footer>
+</body>
+</html>
