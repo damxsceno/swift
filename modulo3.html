@@ -8,7 +8,7 @@
 </head>
 <body>
     <header>
-        <h1><a href="index.html">SWIFT.GPT</a></h1>
+        <h1><a href="index.html">SWIFT COURSE</a></h1>
         <nav>
             <ul>
                 <li><a href="modulo1.html">MÓDULO I</a></li>
@@ -21,7 +21,151 @@
         <section class="module-content">
             <h2>MÓDULO III: AVANÇADO</h2><br>
             <p>Desenvolvimento de uma Aplicação</p><br>
-            <h3 style="text-align: center;">EM DESENVOLVIMENTO</h3>
+            <h3 style="text-align: center;">JOGO PING PONG</h3>
+            <p>CÓDIGO DO PROJETO:</p>
+            <p style="text-align: justify;">
+                import SwiftUI <br><br>
+
+                struct ContentView: View {<br>
+                @State private var player1Score = 0<br>
+                @State private var player2Score = 0<br>
+                @State private var ballPosition = CGPoint(x: 200, y: 200)<br>
+                @State private var ballVelocity = CGVector(dx: 5, dy: 5)<br>
+                @State private var player1Position = CGPoint(x: 200, y: 750)<br>
+                @State private var player2Position = CGPoint(x: 200, y: 50)<br>
+                @State private var player2Speed: CGFloat = 4.6 // Velocidade do jogador 2 (computador)<br><br>
+                
+                let maxScore = 10<br>
+                let gameSpeed = 0.01 // Ajuste a velocidade do jogo conforme necessário<br><br>
+                
+                
+                var body: some View {<br>
+                    VStack {<br><br>
+                        
+                        Spacer()<br><br>
+                        
+                        HStack {<br>
+                            Text("Jogador 1: \(player1Score)")<br>
+                                .font(.title)<br>
+                                .padding(.trailing, 20)<br><br>
+                            
+                            Text("Jogador 2: \(player2Score)")<br>
+                                .font(.title)<br>
+                        }<br><br>
+                        
+                        Spacer()<br><br>
+                        
+                        ZStack {<br>
+                            Color.black<br>
+                            Circle()<br>
+                                .foregroundColor(.white)<br>
+                                .frame(width: 20, height: 20)<br>
+                                .position(ballPosition)<br><br>
+                            
+                            Rectangle()<br>
+                                .foregroundColor(.white)<br>
+                                .frame(width: 100, height: 20)<br>
+                                .position(player1Position)<br><br>
+                            
+                            Rectangle()<br>
+                                .foregroundColor(.white)<br>
+                                .frame(width: 100, height: 20)<br>
+                                .position(player2Position)<br>
+                        }<br>
+                        .onAppear() {<br>
+                            startGame()<br>
+                        }<br>
+                    }<br>
+                    .edgesIgnoringSafeArea(.all)<br>
+                    .onAppear() {<br>
+                        startGame()<br>
+                    }<br>
+                    .onReceive(Timer.publish(every: gameSpeed, on: .main, in: .common).autoconnect()) { _ in<br>
+                        moveBall()<br>
+                        movePlayer2()<br>
+                        checkCollision()<br>
+                    }<br>
+                    .onTapGesture {<br>
+                        let newBallVelocity = CGVector(dx: ballVelocity.dx, dy: -ballVelocity.dy)<br>
+                        ballVelocity = newBallVelocity<br>
+                    }<br>
+                    .gesture(DragGesture()<br>
+                        .onChanged { value in<br>
+                            movePlayer1(to: value.location)<br>
+                        }<br>
+                    )<br>
+                }<br><br>
+                
+                func startGame() {<br>
+                    ballPosition = CGPoint(x: 200, y: 200)<br>
+                    player1Score = 0<br>
+                    player2Score = 0<br>
+                    ballVelocity = CGVector(dx: 5, dy: 5)<br>
+                }<br><br>
+                
+                func moveBall() {<br>
+                    ballPosition.x += ballVelocity.dx<br>
+                    ballPosition.y += ballVelocity.dy<br>
+                    checkScore()<br>
+                }<br><br>
+                
+                func movePlayer1(to position: CGPoint) {<br>
+                    player1Position.x = position.x<br>
+                }<br><br>
+                
+                func movePlayer2() {<br>
+                    // Simples movimento do jogador 2 (computador) em direção à bola<br>
+                    if ballPosition.x > player2Position.x {<br>
+                        player2Position.x += player2Speed<br>
+                    } else {<br>
+                        player2Position.x -= player2Speed<br>
+                    }<br>
+                }<br><br>
+                
+                func checkCollision() {<br>
+                    if ballPosition.x < 0 || ballPosition.x > 1150 {<br>
+                        ballVelocity.dx = -ballVelocity.dx<br>
+                    }<br><br>
+                    
+                    if ballPosition.y < 0 || ballPosition.y > 1200 { // Ajuste conforme necessário<br>
+                        ballVelocity.dy = -ballVelocity.dy<br>
+                    }<br>
+                    
+                    if ballPosition.y > player1Position.y - 10 && ballPosition.y < player1Position.y + 10 && ballPosition.x > player1Position.x - 50 && ballPosition.x < player1Position.x + 50 {<br>
+                        ballVelocity.dy = -ballVelocity.dy<br>
+                    }<br><br>
+                    
+                    if ballPosition.y > player2Position.y - 10 && ballPosition.y < player2Position.y + 10 && ballPosition.x > player2Position.x - 50 && ballPosition.x < player2Position.x + 50 {<br>
+                        ballVelocity.dy = -ballVelocity.dy<br>
+                    }<br>
+                }<br><br>
+                
+                func checkScore() {<br>
+                    if ballPosition.y < 0 {<br>
+                        player1Score += 1<br>
+                        resetBall()<br>
+                    } else if ballPosition.y > 1200 { // Ajuste conforme necessário<br>
+                        player2Score += 1<br>
+                        resetBall()<br>
+                    }<br><br>
+                    
+                    if player1Score >= maxScore || player2Score >= maxScore {<br>
+                        // Jogo terminou, você pode adicionar a lógica de reiniciar o jogo aqui<br>
+                    }<br>
+                }<br><br>
+                
+                func resetBall() {<br>
+                    ballPosition = CGPoint(x: 200, y: 200)<br>
+                    ballVelocity = CGVector(dx: 5, dy: 5)<br>
+                }<br>
+            }<br><br>
+
+            struct ContentView_Previews: PreviewProvider {<br>
+                static var previews: some View {<br>
+                    ContentView()<br>
+                }<br>
+            }
+            </p>
         </section>
     </main>
     <footer>
